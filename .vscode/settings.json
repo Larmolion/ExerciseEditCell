@@ -1,0 +1,7 @@
+{
+  "editor.formatOnSave": true, // 保存格式化文件
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true // 开启eslint自动检测
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode" // 指定 prettier 为所有文件默认格式化器
+}
