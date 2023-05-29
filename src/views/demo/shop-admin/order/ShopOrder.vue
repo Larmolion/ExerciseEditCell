@@ -1,6 +1,6 @@
 <template>
   <div class="content-container" direction="vertical">
-    <!--  input  -->
+    <!--  筛选检索项  -->
     <div>
       <el-container class="content-row">
         <div class="input-tip">商品名称：</div>
@@ -62,13 +62,14 @@
         <el-button type="primary" @click="dispatchGoods">批量发货</el-button>
       </el-container>
     </div>
-    <!--list-->
+    <!--标签分类-->
     <div>
       <el-tabs type="card" @tab-change="handleClick" v-model="activeName">
         <el-tab-pane label="全部" name="first"></el-tab-pane>
         <el-tab-pane label="未完成" name="second"></el-tab-pane>
         <el-tab-pane label="已完成" name="third"></el-tab-pane>
       </el-tabs>
+      <!-- 主要操作的表单，基本可编辑和更新的练习都在此表单上进行 -->
       <el-table
         ref="multipleTable"
         :data="orderList"
@@ -126,16 +127,12 @@
         </el-table-column>
         <el-table-column label="分销信息" width="100">
           <template #default="scope">
-            <el-tag size="default" :type="scope.row.role ? '' : 'info'">{{
-              scope.row.role ? '经理' : '分销员'
-            }}</el-tag>
+            <span>{{ scope.row.role ? '经理' : '分销员' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="支付方式" width="100">
           <template #default="scope">
-            <el-tag size="default">{{
-              scope.row.payType ? '微信' : '支付宝'
-            }}</el-tag>
+            <span>{{ scope.row.payType ? '微信' : '支付宝' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="电话号码" width="150">
@@ -182,6 +179,7 @@
       @submit="handleSubmit"
     ></edit-cell-dialog>
 
+    <!-- 每行的表单修改 -->
     <el-dialog
       v-model="mutilDialogView"
       title="商品信息修改"
@@ -250,7 +248,7 @@
       </template>
     </el-dialog>
 
-    <!-- 分页 -->
+    <!-- 分页器 -->
     <el-pagination
       background
       layout="total, sizes, prev, pager, next, jumper"

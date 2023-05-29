@@ -1,18 +1,60 @@
-# Vue 3 + TypeScript + Vite
+# 可更新和编辑的HTML练习
+## 思路
+经过分析与交流，本人认为可编辑的HTML是建立在表单的基础上实现的，表单用于从后端获得数据，并展示出来，基本上编辑和更新数据也离不开表单。
+根据以上思路，我就是围绕如何展示数据并编辑表单上的内容练习的。
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 实现
 
-## Recommended IDE Setup
+### 基本页面
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+![image-20230529162858355](src\assets\md_icons\微信截图_20230529162745.png)
 
-## Type Support For `.vue` Imports in TS
+**技术栈**：`Vue3`+`Element-Plus`+`Vite`+`TypeScript`+`Javascript`+`Vue Router`
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+#### 项目启动
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+```shell
+# 安装依赖
+npm install
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+# 项目运行
+pnpm run dev
+```
+
+### 编辑数据操作
+
+- 单击`商品名称`或`商品价格`列可直接在其上编辑
+- 单击`买家信息`，即可打开可编辑此单元格的弹窗，其上可以看到历史修改信息和原始信息
+- 单击`交易时间`旁边的`开始修改`标签，可以进行这一列的修改
+- 单击`操作`下的`修改信息`按钮，可以打开这一行的编辑信息弹窗
+- 单击`删除`可以删除这一行的数据
+
+#### 如何把数据更新的后端
+
+因为本练习是用`mock.js`模拟的数据，所以修改的数如何传回后端本练习没有实现。
+
+### 具体代码
+
+因本练习有很多对于主要练习无关的代码，我进行了一定程度的删除，不过依然遗留有部分无关代码。所以本练习主要代码路径如下：
+
+- 主要练习文件夹：`src\views\demo\shop-admin`
+- 主页面代码：`src\views\demo\shop-admin\order\ShopOrder.vue`
+- Mock模拟数据代码：`src\mock`
+
+## 收获与思考
+
+### 收获
+
+- 基本可以实现用Element-Plus编写页面
+- 基本实现可编辑的表格
+
+### 思考
+
+- 可编辑的HTML目前在练习的上的实现，耦合性还是偏高，在我把点击编辑封装成组件时，虽然部分解耦，但可定制性大大降低，这是需要解决的地方。
+- 在应对大量数据的更新编辑时，目前练习上的办法显得太过笨拙，有待优化。
+- 虽然练习上展示了好几种编辑更新数据的办法，但依然认为不是最优解。或许在代码中用`jsx`或`tsx`会获得更好的体验，比如减少部分代码的重复书写，提高灵活性。
+- 对于真实数据的交互练习不够，因为是mock模拟的数据，所以在将来与真实后端交互时数据的更新和编辑将会出现一些意想不到的情况。
+
+### 结语
+
+本练习我会把他写成一个Demo，封装可复用的一些组件，并上传Github,继续完善功能与代码。
