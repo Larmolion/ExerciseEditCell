@@ -5,41 +5,52 @@
       <el-container class="content-row">
         <div class="input-tip">商品名称：</div>
         <div class="input-field">
-          <el-input v-model="queryParam.good"></el-input>
+          <el-input v-model="queryParam.name"></el-input>
         </div>
-        <div class="input-tip">收货人：</div>
+        <div class="input-tip">商品价格：</div>
         <div class="input-field">
-          <el-input v-model="queryParam.consignee"></el-input>
+          <el-input v-model="queryParam.price"></el-input>
         </div>
-        <div class="input-tip">支付时间：</div>
+        <div class="input-tip">买家信息：</div>
+        <div class="input-field">
+          <el-input v-model="queryParam.buyer"></el-input>
+        </div>
+        <div class="input-tip">交易时间：</div>
         <div class="input-field">
           <el-date-picker
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            v-model="queryParam.payTime"
-          ></el-date-picker>
+            v-model="queryParam.time"
+            type="datetime"
+            format="YYYY/MM/DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
+          >
+          </el-date-picker>
         </div>
       </el-container>
       <el-container class="content-row">
-        <div class="input-tip">用户名称：</div>
+        <div class="input-tip">分销信息：</div>
         <div class="input-field">
-          <el-input v-model="queryParam.name"></el-input>
+          <el-select v-model="queryParam.role" clearable>
+            <el-option label="经理" value="true"></el-option>
+            <el-option label="分销员" value="false"></el-option>
+          </el-select>
         </div>
-        <div class="input-tip">手机号：</div>
+        <div class="input-tip">支付方式：</div>
+        <div class="input-field">
+          <el-select v-model="queryParam.payType" clearable>
+            <el-option label="支付宝" value="true"></el-option>
+            <el-option label="微信" value="false"></el-option>
+          </el-select>
+        </div>
+        <div class="input-tip">电话号码：</div>
         <div class="input-field">
           <el-input v-model="queryParam.phone"></el-input>
         </div>
-        <div class="input-tip">发货时间：</div>
+        <div class="input-tip">交易状态：</div>
         <div class="input-field">
-          <el-date-picker
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            v-model="queryParam.sendTime"
-          ></el-date-picker>
+          <el-select v-model="queryParam.state" clearable>
+            <el-option label="已完成" value="true"></el-option>
+            <el-option label="未完成" value="false"></el-option>
+          </el-select>
         </div>
       </el-container>
     </div>
@@ -68,13 +79,13 @@
         @cell-click="myCellClick"
       >
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="商品" width="100">
+        <el-table-column label="商品名称" width="100">
           <template #default="scope">
             <!-- 最初版本可编辑单元格，高耦合 -->
             <edit-cell-demo v-model:data="scope.row.name"></edit-cell-demo>
           </template>
         </el-table-column>
-        <el-table-column label="总价/数量" width="100">
+        <el-table-column label="商品价格" width="100">
           <template #default="scope">
             <!-- 可编辑单元格，优化版本 -->
             <!-- 目前存在问题，会导致table点击事件第一次不生效 -->
@@ -83,11 +94,36 @@
         </el-table-column>
         <el-table-column label="买家信息" width="100" prop="buyer">
         </el-table-column>
-        <el-table-column
-          label="交易时间"
-          width="200"
-          prop="time"
-        ></el-table-column>
+        <el-table-column label="交易时间" width="200" prop="time">
+          <template #header="scope">
+            {{ scope.column.label }}
+            <el-tag
+              v-if="columnSwitch.time"
+              type="info"
+              @click="() => (columnSwitch.time = false)"
+              >关闭修改</el-tag
+            >
+            <el-tag
+              v-else
+              type="success"
+              @click="() => (columnSwitch.time = true)"
+              >开始修改</el-tag
+            >
+          </template>
+          <template #default="scope">
+            <div v-if="columnSwitch.time">
+              <el-date-picker
+                v-model="scope.row.time"
+                type="datetime"
+                format="YYYY/MM/DD HH:mm:ss"
+                value-format="YYYY-MM-DD HH:mm:ss"
+                size="small"
+              >
+              </el-date-picker>
+            </div>
+            <div v-else>{{ scope.row.time }}</div>
+          </template>
+        </el-table-column>
         <el-table-column label="分销信息" width="100">
           <template #default="scope">
             <el-tag size="default" :type="scope.row.role ? '' : 'info'">{{
@@ -102,12 +138,12 @@
             }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          label="电话"
-          width="150"
-          prop="phone"
-        ></el-table-column>
-        <el-table-column label="状态" width="100">
+        <el-table-column label="电话号码" width="150">
+          <template #default="scope">
+            <edit-cell-demo v-model:data="scope.row.phone"></edit-cell-demo>
+          </template>
+        </el-table-column>
+        <el-table-column label="交易状态" width="100">
           <template #default="scope">
             <el-tag
               size="default"
@@ -125,9 +161,9 @@
               @click="deleteItem(scope.$index)"
               >删除</el-button
             >
-            <el-button size="small" type="primary" @click="callUser(scope.row)"
+            <!-- <el-button size="small" type="primary" @click="callUser(scope.row)"
               >联系客户</el-button
-            >
+            > -->
             <el-button size="small" type="primary" @click="editItem(scope.row)"
               >修改信息</el-button
             >
@@ -159,7 +195,7 @@
             placeholder="请输入商品名称"
           ></el-input>
         </el-form-item>
-        <el-form-item label="总价/数量：" prop="price">
+        <el-form-item label="商品价格：" prop="price">
           <el-input
             v-model="fromData.price"
             placeholder="请输入商品名称"
@@ -172,24 +208,25 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="交易时间：" prop="time">
-          <el-date-picker v-model="fromData.time" type="datetime">
-          </el-date-picker>
-          <el-input
+          <el-date-picker
             v-model="fromData.time"
-            placeholder="请输入商品名称"
-          ></el-input>
+            type="datetime"
+            format="YYYY/MM/DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
+          >
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="分销信息：" prop="role">
-          <el-input
-            v-model="fromData.role"
-            placeholder="请输入商品名称"
-          ></el-input>
+          <el-radio-group v-model="fromData.role">
+            <el-radio :label="true">经理</el-radio>
+            <el-radio :label="false">分销员</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="支付方式：" prop="payType">
-          <el-input
-            v-model="fromData.payType"
-            placeholder="请输入商品名称"
-          ></el-input>
+          <el-radio-group v-model="fromData.payType">
+            <el-radio :label="true">微信</el-radio>
+            <el-radio :label="false">支付宝</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="电话：" prop="phone">
           <el-input
@@ -198,10 +235,10 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="状态：" prop="state">
-          <el-input
-            v-model="fromData.state"
-            placeholder="请输入商品名称"
-          ></el-input>
+          <el-radio-group v-model="fromData.state">
+            <el-radio :label="true">已完成</el-radio>
+            <el-radio :label="false">未完成</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
 
@@ -219,6 +256,8 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="pageTotal"
       v-model:current-page="currentPage"
+      v-model:page-size="pageSize"
+      :page-sizes="[10, 20, 30]"
       style="margin-top: 10px"
     ></el-pagination>
   </div>
@@ -242,6 +281,9 @@ const router = useRouter();
 
 // 订单列表数据
 const orderList = ref([]);
+const orderAllList = ref([]);
+const orderTrueList = ref([]);
+const orderFalseList = ref([]);
 // 每行数据
 const fromData = reactive({
   name: '',
@@ -255,12 +297,14 @@ const fromData = reactive({
 });
 // 筛选订单的参数
 const queryParam = reactive({
-  good: '',
-  consignee: '',
-  phone: '',
   name: '',
-  payTime: '',
-  sendTime: '',
+  price: '',
+  buyer: '',
+  time: '',
+  role: '',
+  state: '',
+  payType: '',
+  phone: '',
 });
 // 对话框是否显示
 const dialogView = ref(false);
@@ -275,39 +319,62 @@ const cellLable = ref();
 const cellProperty = ref();
 // 当前选中的订单对象
 const multipleSelection = ref();
-
+const columnSwitch = ref({
+  name: false,
+  price: false,
+  buyer: false,
+  time: false,
+  role: false,
+  state: false,
+  payType: false,
+  phone: false,
+});
+// tabs刷新数据
 const activeName = ref();
-
+// 分页计数器
 const pageTotal = computed(() => {
   return orderList.value.length * 10;
 });
-
+// 当前页码
 const currentPage = ref(1);
-
+// 每页数据量
+const pageSize = ref(10);
+// 监听当前页码的变化，刷新页面
 watch(currentPage, (newValue) => {
-  orderList.value = Mock.getOrder(route.params.type);
+  orderList.value = Mock.getOrder(route.params.type, pageSize.value);
+});
+// 监听每页数据量的变化，刷新页面
+watch(pageSize, (newValue) => {
+  orderList.value = Mock.getOrder(route.params.type, pageSize.value);
 });
 
-// 模拟请求数据
+// 筛选模拟请求数据
 function requestData() {
   ElMessage.success('筛选请求数据:' + JSON.stringify(queryParam));
-  orderList.value = Mock.getOrder(route.params.type);
+  orderList.value = Mock.getOrder(route.params.type, pageSize.value);
 }
 // 切换tab刷新数据
 function handleClick() {
-  ElMessage.success('切换tab刷新数据:' + activeName.value);
+  ElMessage.success('切换tab刷新数据:' + route.params.type);
   switch (activeName.value) {
     case 'first':
-      orderList.value = Mock.getOrder(route.params.type);
+      //orderAllList.value = Mock.getOrder(route.params.type);
+      orderList.value = orderAllList.value;
       break;
     case 'second':
-      orderList.value = orderList.value.filter((data) => data.state === true);
+      orderTrueList.value = orderAllList.value.filter(
+        (data) => data.state === true
+      );
+      orderList.value = orderTrueList.value;
       break;
     case 'third':
-      orderList.value = orderList.value.filter((data) => data.state === false);
+      orderFalseList.value = orderAllList.value.filter(
+        (data) => data.state === false
+      );
+      orderList.value = orderFalseList.value;
       break;
     default:
-      orderList.value = Mock.getOrder(route.params.type);
+      orderAllList.value = Mock.getOrder(route.params.type, pageSize.value);
       break;
   }
 }
@@ -344,7 +411,7 @@ function clear() {
   queryParam.payTime = '';
   queryParam.sendTime = '';
 
-  orderList.value = Mock.getOrder(route.params.type);
+  orderList.value = Mock.getOrder(route.params.type, pageSize.value);
 }
 // 导出订单
 function exportData() {
@@ -392,12 +459,14 @@ function editItem(item) {
 
 // 路由更新时刷新数据
 onBeforeRouteUpdate((to) => {
-  orderList.value = Mock.getOrder(to.params.type);
+  orderAllList.value = Mock.getOrder(to.params.type, pageSize.value);
+  orderList.value = orderAllList.value;
 });
 
 // 组件加载时更新数据
 onMounted(() => {
-  orderList.value = Mock.getOrder(route.params.type);
+  orderAllList.value = Mock.getOrder(route.params.type, pageSize.value);
+  orderList.value = orderAllList.value;
 });
 </script>
 
