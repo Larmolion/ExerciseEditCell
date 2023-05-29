@@ -7,11 +7,10 @@ const Mock = {
 		let array = [];
 		for (let i = 0; i < pageSize; i++) {
 			array.push(mockJs.mock({
-				'name': (type == 0 ? '普通商品' : '秒杀商品') + type + i,
+				'name': (type == 0 ? '普通订单' : '秒杀订单') + type + i,
 				'price': mockJs.Random.integer(20, 500) + '元',
 				'buyer': mockJs.Random.cname(),
-				// mock的日期格式与element支持的格式有稍微地不同，注意修改
-				'time': mockJs.Random.datetime('yyyy-MM-dd HH:mm:ss'),
+				'time': mockJs.Random.datetime('yyyy-MM-dd HH:mm:ss'), // mock的日期格式与element支持的格式有稍微地不同，注意修改
 				'role': mockJs.Random.boolean(),
 				'state': mockJs.Random.boolean(),
 				'payType': mockJs.Random.boolean(),
@@ -26,7 +25,7 @@ const Mock = {
 		let array = [];
 		for (let i = 0; i < mockJs.Random.integer(5, 10); i++) {
 			array.push(mockJs.mock({
-				'name': (type == 0 ? '普通商品' : type === 1 ? '秒杀商品' : "今日推荐") + i,
+				'name': (type == 0 ? '普通商品' : type == 1 ? '秒杀商品' : "今日推荐") + i,
 				'img': mockJs.Random.dataImage('60x100', '商品示例图'),
 				'price': mockJs.Random.integer(20, 500) + '元',
 				'sellCount': mockJs.Random.integer(10, 100),

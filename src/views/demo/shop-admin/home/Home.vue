@@ -39,7 +39,7 @@
           <el-menu-item index="/shophome/goods/0">普通商品</el-menu-item>
           <el-menu-item index="/shophome/goods/1">秒杀商品</el-menu-item>
           <el-menu-item index="/shophome/goods/2">今日推荐</el-menu-item>
-          <el-menu-item index="/shophome/category">商品分类</el-menu-item>
+          <el-menu-item index="/shophome/goods/category">商品分类</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="3">
           <template #title>
@@ -52,7 +52,7 @@
           >
           <el-menu-item index="/shophome/ownerorder">店长订单</el-menu-item>
         </el-sub-menu>
-        <el-sub-menu index="4">
+        <!-- <el-sub-menu index="4">
           <template #title>
             <i class="el-icon-s-ticket"></i>
             <span>财务管理</span>
@@ -66,7 +66,7 @@
             <span>基础管理</span>
           </template>
           <el-menu-item index="/home/data">数据统计</el-menu-item>
-        </el-sub-menu>
+        </el-sub-menu> -->
       </el-menu>
     </el-aside>
     <el-main style="padding: 0; height: 100%">
