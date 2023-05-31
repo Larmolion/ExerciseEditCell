@@ -10,7 +10,7 @@ const Mock = {
 				'name': (type == 0 ? '普通订单' : '秒杀订单') + type + i,
 				'price': mockJs.Random.integer(20, 500) + '元',
 				'buyer': mockJs.Random.cname(),
-				'time': mockJs.Random.datetime('yyyy-MM-dd HH:mm:ss'), // mock的日期格式与element支持的格式有稍微地不同，注意修改
+				'time': mockJs.Random.datetime('yyyy/MM/dd HH:mm:ss'), // mock的日期格式与element支持的格式有稍微地不同，注意修改
 				'role': mockJs.Random.boolean(),
 				'state': mockJs.Random.boolean(),
 				'payType': mockJs.Random.boolean(),
@@ -24,20 +24,28 @@ const Mock = {
 	getGoods(type) {
 		let array = [];
 		for (let i = 0; i < mockJs.Random.integer(5, 10); i++) {
+			let price = mockJs.Random.integer(20, 1000);
+			let back = mockJs.Random.integer(10, 50)
 			array.push(mockJs.mock({
 				'name': (type == 0 ? '普通商品' : type == 1 ? '秒杀商品' : "今日推荐") + i,
-				'img': mockJs.Random.dataImage('60x100', '商品示例图'),
-				'price': mockJs.Random.integer(20, 500) + '元',
-				'sellCount': mockJs.Random.integer(10, 100),
+				'img': mockJs.Random.dataImage('100x60', '商品示例图'),
+				'price': price + '元',
 				'count': mockJs.Random.integer(10, 100),
-				'back': mockJs.Random.integer(10, 100),
-				'backPrice': mockJs.Random.integer(10, 5000) + '元',
+				'sellCount': mockJs.Random.integer(10, 100),
+				'back': back,
+				'backPrice': price * back + '元',
 				'owner': mockJs.Random.cname(),
-				'time': mockJs.Random.datetime('yyyy-MM-dd A HH:mm:ss'),
+				'addTime': mockJs.Random.datetime('yyyy/MM/dd HH:mm:ss'),
+				'updateTime': mockJs.Random.datetime('yyyy/MM/dd HH:mm:ss'),
+				'endTime': mockJs.Random.datetime('yyyy/MM/dd HH:mm:ss'),
 				'state': mockJs.Random.boolean(),
 			}))
 		}
 		return array;
+	},
+	// 获得表单的标题
+	getGoodsTable() {
+		return ['商品', '价格', '销量', '库存', '退款数量', '退款金额', '操作', '管理员', '更新时间'];
 	},
 	// 模拟店长数据
 	getManagerList() {

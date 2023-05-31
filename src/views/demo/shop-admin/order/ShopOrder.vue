@@ -210,7 +210,7 @@
             v-model="fromData.time"
             type="datetime"
             format="YYYY/MM/DD HH:mm:ss"
-            value-format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY/MM/DD HH:mm:ss"
           >
           </el-date-picker>
         </el-form-item>
@@ -277,6 +277,7 @@ import { first } from 'lodash';
 const route = useRoute();
 const router = useRouter();
 
+//const multipleTable = ref();
 // 订单列表数据
 const orderList = ref([]);
 const orderAllList = ref([]);

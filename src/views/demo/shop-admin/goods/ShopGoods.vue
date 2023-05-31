@@ -1,46 +1,5 @@
 <template>
   <div class="content-container" direction="vertical">
-    <div>
-      <el-container class="content-row">
-        <div class="input-tip">商品名称：</div>
-        <div class="input-field">
-          <el-input v-model="queryParams.name"></el-input>
-        </div>
-        <div class="input-tip">商品编号：</div>
-        <div class="input-field">
-          <el-input v-model="queryParams.id"></el-input>
-        </div>
-        <div class="input-tip">商品分类：</div>
-        <div class="input-field">
-          <el-select v-model="queryParams.category" placeholder="请选择分类">
-            <el-option
-              v-for="item in categories"
-              :key="item"
-              :label="item"
-              :value="item"
-            ></el-option>
-          </el-select>
-        </div>
-      </el-container>
-      <el-container class="cotent-row">
-        <div class="input-tip">是否上架:</div>
-        <div class="input-field">
-          <el-select v-model="sellModesString">
-            <el-option key="0" label="否" :value="0"></el-option>
-            <el-option key="1" label="是" :value="1"></el-option>
-            <el-option key="2" label="全部" :value="2"></el-option>
-          </el-select>
-        </div>
-        <div class="input-tip">是否过期:</div>
-        <div class="input-field">
-          <el-select v-model="expModeString">
-            <el-option key="0" label="否" :value="0"></el-option>
-            <el-option key="1" label="是" :value="1"></el-option>
-            <el-option key="2" label="全部" :value="2"></el-option>
-          </el-select>
-        </div>
-      </el-container>
-    </div>
     <!-- button -->
     <div class="content-row">
       <el-container>
@@ -51,42 +10,90 @@
     </div>
     <!-- list -->
     <div>
-      <el-table :data="goodsData" tooltip-effect="dark" style="width: 100%">
-        <el-table-column label="商品" width="100">
+      <el-table
+        ref="refTable"
+        :data="goodsData"
+        tooltip-effect="dark"
+        style="width: 100%"
+      >
+        <el-table-column label="商品" width="150">
           <template #default="scope">
             <div style="text-align: center">
               <el-image
                 :src="scope.row.img"
-                style="width: 60px; height: 100px"
+                style="width: 100px; height: 60px"
               />
             </div>
             <div style="text-align: center">{{ scope.row.name }}</div>
           </template>
         </el-table-column>
-        <el-table-column
-          label="价格"
-          width="100"
-          prop="price"
-        ></el-table-column>
+        <el-table-column label="价格" width="100">
+          <template #default="scope">
+            <edit-cell-demo
+              @endEidt="
+                (v) => {
+                  endEidt(scope.row, v);
+                }
+              "
+              v-model:data="scope.row.price"
+            ></edit-cell-demo>
+          </template>
+        </el-table-column>
+        <el-table-column label="库存" width="100">
+          <template #default="scope">
+            <edit-cell-demo
+              @endEidt="
+                (v) => {
+                  endEidt(scope.row, v);
+                }
+              "
+              v-model:data="scope.row.count"
+            ></edit-cell-demo>
+          </template>
+        </el-table-column>
         <el-table-column
           label="销量"
           width="100"
           prop="sellCount"
         ></el-table-column>
-        <el-table-column
-          label="库存"
-          width="100"
-          prop="count"
-        ></el-table-column>
-        <el-table-column
-          label="退款数量"
-          width="100"
-          prop="back"
-        ></el-table-column>
+        <el-table-column label="退款数量" width="100">
+          <template #default="scope">
+            <edit-cell-demo
+              @endEidt="
+                (v) => {
+                  endEidtBack(scope.row, v);
+                }
+              "
+              v-model:data="scope.row.back"
+            ></edit-cell-demo>
+          </template>
+        </el-table-column>
         <el-table-column
           label="退款金额"
           width="100"
           prop="backPrice"
+        ></el-table-column>
+        <el-table-column
+          label="管理员"
+          width="100"
+          prop="owner"
+        ></el-table-column>
+        <el-table-column
+          label="更新时间"
+          width="200"
+          prop="updateTime"
+        ></el-table-column>
+
+        <el-table-column
+          label="上架时间"
+          width="200"
+          prop="addTime"
+        ></el-table-column>
+
+        <el-table-column
+          label="下架时间"
+          width="200"
+          prop="endTime"
         ></el-table-column>
         <el-table-column label="操作" width="100" prop="name">
           <template #default="scope">
@@ -97,41 +104,13 @@
             >
           </template>
         </el-table-column>
-        <el-table-column
-          label="管理员"
-          width="200"
-          prop="time"
-        ></el-table-column>
-        <el-table-column
-          label="更新时间"
-          width="200"
-          prop="time"
-        ></el-table-column>
       </el-table>
     </div>
   </div>
 </template>
 
-<script>
-import Mock from '@/mock/Mock';
-
+<!-- <script>
 export default {
-  name: 'ShopGoods',
-  data() {
-    return {
-      goodsData: [],
-      // 模拟分类数据
-      categories: ['全部', '男装', '女装'],
-      queryParams: {
-        name: '',
-        id: '',
-        category: '',
-        sellMode: 2,
-        expMode: 2,
-      },
-    };
-  },
-
   computed: {
     sellModesString: {
       get() {
@@ -156,48 +135,75 @@ export default {
       },
     },
   },
-  // 组件挂载时获取数据
-  mounted() {
-    this.goodsData = Mock.getGoods(this.$route.params.type);
-  },
-  // 路由更新时刷新数据
-  beforeRouteUpdate(to) {
-    this.goodsData = Mock.getGoods(to.params.type);
-  },
-
-  methods: {
-    // 获取数据的方法
-    requestData() {
-      this.$message({
-        type: 'success',
-        message: '筛选请求参数：' + JSON.stringify(this.queryParams),
-      });
-      this.goodsData = Mock.getGoods(this.$route.params.type);
-    },
-    // 进行上架下架操作
-    operate(item) {
-      item.state = !item.state;
-    },
-    // 清空筛选项
-    clear() {
-      this.queryParams = {
-        name: '',
-        id: '',
-        category: '',
-        sellMode: 2,
-        expMode: 2,
-      };
-      this.goodsData = Mock.getGoods(this.$route.params.type);
-    },
-    // 新增商品
-    addGood() {
-      this.$router.push({
-        name: 'AddGoods',
-        params: { type: this.$route.params.type },
-      });
-    },
-  },
 };
+</script> -->
+
+<script setup>
+import Mock from '@/mock/Mock';
+import EditCellDemo from '../components/EditCellDemo.vue';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
+
+defineOptions({
+  name: 'ShopGoods',
+});
+
+const route = useRoute();
+const router = useRouter();
+
+const goodsData = ref([]);
+const categories = reactive(['全部', '男装', '女装']);
+const queryParams = reactive({
+  name: '',
+  id: '',
+  category: '',
+  sellMode: 2,
+  expMode: 2,
+});
+
+function requestData() {
+  goodsData.value = Mock.getGoods(route.params.type);
+}
+// 进行上架下架操作
+function operate(item) {
+  item.state = !item.state;
+}
+// 清空筛选项
+function clear() {
+  queryParams = {
+    name: '',
+    id: '',
+    category: '',
+    sellMode: 2,
+    expMode: 2,
+  };
+  goodsData.value = Mock.getGoods(route.params.type);
+}
+// 新增商品
+function addGood() {
+  router.push({
+    name: 'AddGoods',
+    params: { type: route.params.type },
+  });
+}
+// 结束单元格编辑，更新数据
+function endEidt(row, value) {
+  let time = new Date().toLocaleString();
+  row.updateTime = time;
+  ElMessage.success('更新值为：' + value + ' 更新时间为：' + time);
+}
+// 结束单元格编辑，更新数据
+function endEidtBack(row, value) {
+  console.log(row.price.slice(0, -1));
+  row.backPrice = value * row.price.slice(0, -1) + '元';
+  ElMessage.success('更新值为：' + value + ' 更新退款金额为：' + row.backPrice);
+}
+
+onMounted(() => {
+  goodsData.value = Mock.getGoods(route.params.type);
+});
+onBeforeRouteUpdate((to) => {
+  goodsData.value = Mock.getGoods(to.params.type);
+});
 </script>
 
 <style scoped></style>
