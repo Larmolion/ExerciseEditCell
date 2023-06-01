@@ -29,7 +29,7 @@
       </el-upload>
     </el-container>
     <el-container class="content-row">
-      <div class="input-tip">上架日期:</div>
+      <div class="input-tip">商品分类:</div>
       <div class="input-field">
         <el-select v-model="queryParams.category">
           <el-option key="0" label="男装" :value="0"></el-option>

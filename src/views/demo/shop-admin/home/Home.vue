@@ -10,7 +10,7 @@
         <div
           style="margin: auto auto auto 10px; color: #ffffff; font-size: 17px"
         >
-          电商后台管理
+          可更新和编辑的HTML练习
         </div>
       </el-container>
       <!--边框对齐，设置：border-right: none-->
@@ -39,9 +39,9 @@
           <el-menu-item index="/shophome/goods/0">普通商品</el-menu-item>
           <el-menu-item index="/shophome/goods/1">秒杀商品</el-menu-item>
           <el-menu-item index="/shophome/goods/2">今日推荐</el-menu-item>
-          <el-menu-item index="/shophome/goods/category">商品分类</el-menu-item>
+          <el-menu-item index="/shophome/goodCategory">商品分类</el-menu-item>
         </el-sub-menu>
-        <el-sub-menu index="3">
+        <!-- <el-sub-menu index="3">
           <template #title>
             <i class="el-icon-s-custom"></i>
             <span>店长管理</span>
@@ -51,7 +51,7 @@
             >店长申请审批列表</el-menu-item
           >
           <el-menu-item index="/shophome/ownerorder">店长订单</el-menu-item>
-        </el-sub-menu>
+        </el-sub-menu> -->
         <!-- <el-sub-menu index="4">
           <template #title>
             <i class="el-icon-s-ticket"></i>
@@ -81,11 +81,11 @@
           "
         >
           <div style="margin: auto auto auto 100px">
-            <h1>欢迎您登录后台管理系统，管理员用户！</h1>
+            <h1>欢迎您登录管理系统，管理员用户！</h1>
           </div>
-          <div style="margin: auto 50px auto auto">
+          <!-- <div style="margin: auto 50px auto auto">
             <el-button type="primary" @click="logout">注销</el-button>
-          </div>
+          </div> -->
         </el-container>
       </el-header>
       <!--这里用来渲染具体的功能模块-->
@@ -101,9 +101,9 @@ export default {
 </script>
 
 <script setup lang="ts">
-function logout() {
-  ElMessage.success('注销成功');
-}
+// function logout() {
+//   ElMessage.success('注销成功');
+// }
 </script>
 
 <style scoped></style>

@@ -30,7 +30,7 @@ export const routes: RouteRecordRaw[] = [
         name: 'AddGoods',
       },
       {
-        path: 'goods/goodCategory',
+        path: 'goodCategory',
         component: GoodCategory,
         name: 'category',
       },
