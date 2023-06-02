@@ -49,6 +49,8 @@ function beginEdit() {
 }
 // 失去焦点，结束编辑
 function loseFocus() {
+  ElMessage.success('修改成功');
+  // 把修改后的数据传回父组件
   emits('endEidt', props.data);
   editStatus.value = false;
 }

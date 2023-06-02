@@ -38,7 +38,9 @@
         </el-select>
       </div>
       <div style="margin-top: 6px">
-        <el-button type="primary" size="small" round>添加分类</el-button>
+        <el-button type="primary" size="small" round @click="addCategory"
+          >添加分类</el-button
+        >
       </div>
     </el-container>
     <el-container class="content-row">
@@ -49,31 +51,31 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      queryParams: {
-        name: '',
-        desc: '',
-        timeRange: '',
-        category: 0,
-      },
-    };
-  },
+<script setup>
+import { useRouter } from 'vue-router';
 
-  methods: {
-    cancel() {
-      this.$router.go(-1);
-    },
-    submit() {
-      this.$message({
-        type: 'success',
-        message: '设置商品基础属性:' + JSON.stringify(this.queryParams),
-      });
-    },
-  },
-};
+const router = useRouter();
+const queryParams = reactive({
+  name: '',
+  desc: '',
+  timeRange: '',
+  category: 0,
+});
+
+function cancel() {
+  router.go(-1);
+  ElMessage.error('取消');
+}
+
+function submit() {
+  ElMessage.success('设置商品基础属性：' + JSON.stringify(queryParams));
+}
+
+function addCategory() {
+  router.push({
+    path: '/shophome/goodCategory',
+  });
+}
 </script>
 
 <style lang="scss" scoped></style>

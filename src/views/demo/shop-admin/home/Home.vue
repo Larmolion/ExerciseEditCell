@@ -39,7 +39,7 @@
           <el-menu-item index="/shophome/goods/0">普通商品</el-menu-item>
           <el-menu-item index="/shophome/goods/1">秒杀商品</el-menu-item>
           <el-menu-item index="/shophome/goods/2">今日推荐</el-menu-item>
-          <el-menu-item index="/shophome/goodCategory">商品分类</el-menu-item>
+          <!-- <el-menu-item index="/shophome/goodCategory">商品分类</el-menu-item> -->
         </el-sub-menu>
         <!-- <el-sub-menu index="3">
           <template #title>
